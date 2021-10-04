@@ -1,10 +1,13 @@
 package ch.heigvd.iict.sym.labo1
 
+import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,7 +79,23 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            //TODO à compléter...
+            if (emailInput != null && passwordInput != null) { // TODO : demander au prof si c'est nécessaire de tester les null
+                if(!emailInput.contains("@")) {
+                    Toast.makeText(applicationContext, getString(R.string.main_invalid_email), Toast.LENGTH_LONG).show()
+                    Log.d(TAG, "Invalid email address")
+                } else if (!credentials.contains(Pair(emailInput, passwordInput))){
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle(getString(R.string.main_invalid_user_title))
+                    builder.setMessage(getString(R.string.main_invalid_user_message))
+                    builder.setPositiveButton(android.R.string.ok) { _, _ -> }
+                    builder.show()
+                }
+                else {
+                    val intent = Intent(this , UserProfileActivity::class.java) // TODO : A check si c'est juste
+                    intent.putExtra("email", emailInput)
+                    startActivity(intent)
+                }
+            }
         }
     }
 
