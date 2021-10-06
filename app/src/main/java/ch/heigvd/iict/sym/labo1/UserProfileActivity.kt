@@ -6,8 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import ch.heigvd.iict.sym.labo1.network.ImageDownloader
 
+/**
+ * Activity where user can view his profile
+ * @author Allemann, Balestrieri, Gomes
+ */
 class UserProfileActivity : AppCompatActivity() {
-
     private lateinit var email: TextView
     private lateinit var avatar: ImageView
 
@@ -15,9 +18,12 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        email = findViewById(R.id.email)
-        email.text = intent.getStringExtra(USER_EMAIL)
+        // Fields mapping
 
+        email = findViewById(R.id.email)
+        email.text = intent.getStringExtra(MainActivity.USER_EMAIL)
+
+        // Loading random avatar image
         avatar = findViewById(R.id.avatar)
         ImageDownloader(avatar, "https://thispersondoesnotexist.com/image").show()
     }
