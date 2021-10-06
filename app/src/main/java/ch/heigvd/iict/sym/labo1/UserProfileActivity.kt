@@ -16,7 +16,7 @@ class UserProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_profile)
 
         email = findViewById(R.id.email)
-        email.text = intent.getStringExtra("email")
+        email.text = intent.getStringExtra(USER_EMAIL)
 
         avatar = findViewById(R.id.avatar)
         ImageDownloader(avatar, "https://thispersondoesnotexist.com/image").show()

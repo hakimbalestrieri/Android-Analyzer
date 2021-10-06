@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
+const val USER_EMAIL = "ch.heigvd.iict.sym.labo1.USER_EMAIL"
+
 class MainActivity : AppCompatActivity() {
 
     // on définit une liste de couples e-mail / mot de passe
@@ -79,11 +81,13 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // vérifier les inputs email et mot de passe
             if (emailInput != null && passwordInput != null) { // TODO : demander au prof si c'est nécessaire de tester les null
                 if(!emailInput.contains("@")) {
+                    // Affichage d'un toast
                     Toast.makeText(applicationContext, getString(R.string.main_invalid_email), Toast.LENGTH_LONG).show()
-                    Log.d(TAG, "Invalid email address")
                 } else if (!credentials.contains(Pair(emailInput, passwordInput))){
+                    // Affichage d'une fenêtre de dialogue
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle(getString(R.string.main_invalid_user_title))
                     builder.setMessage(getString(R.string.main_invalid_user_message))
@@ -91,8 +95,9 @@ class MainActivity : AppCompatActivity() {
                     builder.show()
                 }
                 else {
-                    val intent = Intent(this , UserProfileActivity::class.java) // TODO : A check si c'est juste
-                    intent.putExtra("email", emailInput)
+                    val intent = Intent(this , UserProfileActivity::class.java).apply {
+                        putExtra(USER_EMAIL, emailInput)
+                    }
                     startActivity(intent)
                 }
             }
