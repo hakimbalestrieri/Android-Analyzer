@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Abstract activity class where user can enter an email and a password
  * @author Allemann, Balestrieri, Gomes
  */
-abstract class UserPasswordActivity : AppCompatActivity() {
+abstract class UserPasswordActivity : LogsActivity() {
     private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var cancelButton: Button

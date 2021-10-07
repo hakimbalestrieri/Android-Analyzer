@@ -10,7 +10,7 @@ import ch.heigvd.iict.sym.labo1.network.ImageDownloader
  * Activity where user can view his profile
  * @author Allemann, Balestrieri, Gomes
  */
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : LogsActivity() {
     private lateinit var email: TextView
     private lateinit var avatar: ImageView
 
