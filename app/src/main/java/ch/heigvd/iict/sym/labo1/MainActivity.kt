@@ -5,11 +5,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 
@@ -18,6 +16,12 @@ import androidx.activity.result.contract.ActivityResultContracts
  * @author Allemann, Balestrieri, Gomes
  */
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "MainActivity"
+        const val USER_EMAIL = "ch.heigvd.iict.sym.labo1.USER_EMAIL"
+    }
+
     private val credentials = mutableListOf(
         Pair("user1@heig-vd.ch", "1234"),
         Pair("user2@heig-vd.ch", "abcd")
@@ -27,7 +31,60 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cancelButton: Button
     private lateinit var validateButton: Button
     private lateinit var newAccount: TextView
-    private val startForResult =
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // TODO : factoriser ça ? Si oui, comment ?
+        email = findViewById(R.id.new_account_email)
+        password = findViewById(R.id.new_account_password)
+        cancelButton = findViewById(R.id.new_account_cancel)
+        validateButton = findViewById(R.id.new_account_validate)
+        newAccount = findViewById(R.id.main_new_account)
+
+        // TODO : factoriser les events ? Si oui, comment ?
+        cancelButton.setOnClickListener {
+            Utils.resetEditTextFields(listOf(email, password))
+        }
+
+        validateButton.setOnClickListener {
+            // Validate email and password fields
+            if (!Utils.validateEmailAndPassword(email, password, this))
+                return@setOnClickListener
+
+            // Get input values
+            val emailInput = email.text?.toString()
+            val passwordInput = password.text?.toString()
+
+            // Check if user does not exists
+            if (!credentials.contains(Pair(emailInput, passwordInput))) {
+                // Display an alert
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(getString(R.string.main_invalid_user_title))
+                builder.setMessage(getString(R.string.main_invalid_user_message))
+                builder.setPositiveButton(android.R.string.ok) { _, _ -> }
+                builder.show()
+            } else {
+                // User exists, navigate to user profile activity
+                startActivity(
+                    Intent(this, UserProfileActivity::class.java).apply {
+                        putExtra(USER_EMAIL, emailInput)
+                    }
+                )
+            }
+        }
+
+        newAccount.setOnClickListener {
+            // Navigate to new account activity with callback function linked
+            startForNewUserResult.launch(Intent(this, NewAccountActivity::class.java))
+        }
+    }
+
+    /**
+     * Register for a new user's result and handling it once it is dispatched by the system
+     */
+    private val startForNewUserResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent: Intent? = result.data
@@ -41,75 +98,4 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Fields mapping
-
-        email = findViewById(R.id.main_email)
-        password = findViewById(R.id.main_password)
-        cancelButton = findViewById(R.id.main_cancel)
-        validateButton = findViewById(R.id.main_validate)
-        newAccount = findViewById(R.id.main_new_account)
-
-        // Events definitions
-
-        cancelButton.setOnClickListener {
-            email.text?.clear()
-            password.text?.clear()
-            email.error = null
-            password.error = null
-        }
-
-        validateButton.setOnClickListener {
-            email.error = null
-            password.error = null
-
-            val emailInput = email.text?.toString()
-            val passwordInput = password.text?.toString()
-
-            // Field verification
-            if (emailInput.isNullOrEmpty() or passwordInput.isNullOrEmpty()) {
-                Log.d(TAG, "Au moins un des deux champs est vide")
-                if (emailInput.isNullOrEmpty())
-                    email.error = getString(R.string.main_mandatory_field)
-                if (passwordInput.isNullOrEmpty())
-                    password.error = getString(R.string.main_mandatory_field)
-                return@setOnClickListener
-            } else {
-                // Email format validation
-                if (!emailInput!!.contains("@")) { // TODO : !! bonne idée ?
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.main_invalid_email),
-                        Toast.LENGTH_LONG
-                    ).show()
-                } // Check if user does not exists
-                else if (!credentials.contains(Pair(emailInput, passwordInput))) {
-                    val builder = AlertDialog.Builder(this)
-                    builder.setTitle(getString(R.string.main_invalid_user_title))
-                    builder.setMessage(getString(R.string.main_invalid_user_message))
-                    builder.setPositiveButton(android.R.string.ok) { _, _ -> }
-                    builder.show()
-                } // User exists, navigate to profile activity
-                else {
-                    val intent = Intent(this, UserProfileActivity::class.java).apply {
-                        putExtra(USER_EMAIL, emailInput)
-                    }
-                    startActivity(intent)
-                }
-            }
-        }
-
-        newAccount.setOnClickListener {
-            startForResult.launch(Intent(this, NewAccountActivity::class.java))
-        }
-    }
-
-    companion object {
-        private const val TAG = "MainActivity"
-        const val USER_EMAIL = "ch.heigvd.iict.sym.labo1.USER_EMAIL"
-    }
 }

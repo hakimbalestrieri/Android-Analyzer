@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import android.content.Intent
 
 /**
@@ -21,62 +20,35 @@ class NewAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_account)
 
-        // Fields mapping
-
-        email = findViewById(R.id.main_email)
-        password = findViewById(R.id.main_password)
-        cancelButton = findViewById(R.id.main_cancel)
-        validateButton = findViewById(R.id.main_validate)
-
-        // Events definitions
+        email = findViewById(R.id.new_account_email)
+        password = findViewById(R.id.new_account_password)
+        cancelButton = findViewById(R.id.new_account_cancel)
+        validateButton = findViewById(R.id.new_account_validate)
 
         cancelButton.setOnClickListener {
-            email.text?.clear()
-            password.text?.clear()
-            email.error = null
-            password.error = null
+            Utils.resetEditTextFields(listOf(email, password))
         }
 
         validateButton.setOnClickListener {
-            email.error = null
-            password.error = null
 
-            val emailInput = email.text?.toString()
-            val passwordInput = password.text?.toString()
-
-            // Field verification
-            if (emailInput.isNullOrEmpty() or passwordInput.isNullOrEmpty()) {
-                if (emailInput.isNullOrEmpty())
-                    email.error = getString(R.string.main_mandatory_field)
-                if (passwordInput.isNullOrEmpty())
-                    password.error = getString(R.string.main_mandatory_field)
+            // Validate email and password fields
+            if (!Utils.validateEmailAndPassword(email, password, this))
                 return@setOnClickListener
+
+            // Build and return result
+            val resultIntent = Intent().apply {
+                putExtra(NEW_USER, Pair(email.text?.toString(), password.text?.toString()))
             }
-            else {
-                // Email format validation
-                if (!emailInput!!.contains("@")) {
-                    // Affichage d'un toast
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.main_invalid_email),
-                        Toast.LENGTH_LONG
-                    ).show()
-                } // Valid fields, return new user data
-                else {
-                    val resultIntent = Intent().apply {
-                        putExtra(NEW_USER, Pair(emailInput, passwordInput))
-                    }
-                    setResult(
-                        RESULT_OK,
-                        resultIntent
-                    ) // TODO : demander au prof si c'est une bonne idée de retourner un intent
-                    finish()
-                }
-            }
+            setResult(
+                RESULT_OK,
+                resultIntent
+            ) // TODO : demander au prof si c'est une bonne idée de retourner un intent
+            finish()
         }
     }
 
     companion object {
+        private const val TAG = "NewAccountActivity"
         const val NEW_USER = "ch.heigvd.iict.sym.labo1.NEW_USER"
     }
 }

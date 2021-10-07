@@ -18,13 +18,15 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        // Fields mapping
-
         email = findViewById(R.id.email)
         email.text = intent.getStringExtra(MainActivity.USER_EMAIL)
 
         // Loading random avatar image
         avatar = findViewById(R.id.avatar)
         ImageDownloader(avatar, "https://thispersondoesnotexist.com/image").show()
+    }
+
+    companion object {
+        private const val TAG = "UserProfileActivity"
     }
 }
