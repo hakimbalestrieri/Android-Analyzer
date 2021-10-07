@@ -39,8 +39,8 @@ abstract class UserPasswordActivity : LogsActivity() {
             password.error = null
 
             // Get input values
-            val emailInput = email.text?.toString()!! // TODO : !! bonne idée ?
-            val passwordInput = password.text?.toString()!!
+            val emailInput = email.text?.toString()
+            val passwordInput = password.text?.toString()
 
             if (emailInput.isNullOrEmpty() or passwordInput.isNullOrEmpty()) {
                 if (emailInput.isNullOrEmpty())
@@ -48,14 +48,14 @@ abstract class UserPasswordActivity : LogsActivity() {
                 if (passwordInput.isNullOrEmpty())
                     password.error = getString(R.string.main_mandatory_field)
                 return@setOnClickListener
-            } else if (!emailInput.contains("@")) {
+            } else if (!emailInput!!.contains("@")) {
                 Toast.makeText(
                     this,
                     getString(R.string.main_invalid_email),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                onSubmit(emailInput, passwordInput)
+                onSubmit(emailInput, passwordInput!!)
             }
         }
     }

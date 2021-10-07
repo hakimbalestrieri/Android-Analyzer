@@ -29,8 +29,7 @@ class MainActivity : UserPasswordActivity() {
                         0,
                         intent.getSerializableExtra(NewAccountActivity.NEW_USER) as Pair<String, String>
                     )
-                    // TODO : demander si on doit vérifier que le user existe pas déjà
-                    // TODO : c'est bien de caster comme ca le result et la paire ?
+                    // We don't assert that the user doest not already exists...
                 }
             }
         }

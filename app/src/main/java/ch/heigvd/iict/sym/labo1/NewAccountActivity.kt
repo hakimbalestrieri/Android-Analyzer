@@ -20,7 +20,7 @@ class NewAccountActivity : UserPasswordActivity() {
         setResult(
             RESULT_OK,
             resultIntent
-        ) // TODO : demander au prof si c'est une bonne idée de retourner un intent
+        )
         finish()
     }
 
