@@ -6,7 +6,7 @@
 
 :dart: **Objectifs :** Ce laboratoire est constitu? de plusieurs manipulations destin?es de impl?menter une application ?l?mentaire sur un ?mulateur et/ou sur un smartphone Android dans le but de se familiariser avec l'environnement (IDE et SDK) de d?veloppement Android.
 
-## :thinking: Premi?res constatations
+## :thinking: Premières constatations
 
 ### Langue de l'interface
 
@@ -176,7 +176,7 @@ La deuxi?me m?thode propose une abstraction qui permet de g?rer la m?thode `onAc
 
 Pour ajouter une image, nous sommes pass?s par l'assistant d'import de Android Studio. Le dossier qui contient les images se trouve dans les ressources et est nomm? "drawable" : `/res/drawable`.
 
-Il existe deux fa�ons de d?finir et d'instancier un `Drawable` en plus d'utiliser les constructeurs de classe :
+Il existe deux façons de d?finir et d'instancier un `Drawable` en plus d'utiliser les constructeurs de classe :
 
 - utiliser une ressource d'image (un fichier bitmap) enregistr?e dans votre projet
 
